@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   Param,
+  ParseBoolPipe,
+  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -12,13 +14,19 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import { UsersService } from './services/users/users.service';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 @Controller('users')
 export class UsersController {
+
+  constructor(private userService: UsersService) {
+
+  }
   @Get()
-  getUsers(@Query('sortBy') sortBy: string) {
+  getUsers(@Query('sortDesc') sortBy: boolean) { // ParseBoolPipe here validates query param
     console.log(sortBy);
-    return { user: 'Rafat Rashid Rahi' };
+    return this.userService.fetchUsers();
   }
 
   // @Post()
@@ -41,7 +49,7 @@ export class UsersController {
   }
 
   @Get(':id/:postId')
-  getPostById(@Param('id') id: string, @Param('postId') postId: string) {
+  getPostById(@Param('id', ParseIntPipe) id: number, @Param('postId') postId: string) { // ParseIntPipe validates the id as a number, aslo it typecasts it to number
     return { id, postId };
   }
 }
