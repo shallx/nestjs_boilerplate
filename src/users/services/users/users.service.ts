@@ -7,5 +7,14 @@ export class UsersService {
     fetchUsers(){
         return this.fakeUsers;
     }
+
+    createUser(userDetails: CreateUserType){
+        this.fakeUsers.push(userDetails);
+        return;
+    }
+
+    fetchUserById(id: number){
+        return this.fakeUsers[id];
+    }
 }
  

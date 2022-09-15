@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseBoolPipe,
   ParseIntPipe,
@@ -16,6 +18,7 @@ import { Request, Response } from 'express';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UsersService } from './services/users/users.service';
 import { IsBoolean, IsOptional } from 'class-validator';
+import { GetUserQueryDto } from './dtos/user.validator.dtos';
 
 @Controller('users')
 export class UsersController {
@@ -24,12 +27,12 @@ export class UsersController {
 
   }
   @Get()
-  getUsers(@Query('sortDesc') sortBy: boolean) { // ParseBoolPipe here validates query param
-    console.log(sortBy);
+  getUsers(@Query(new ValidationPipe()) queryParams: GetUserQueryDto) { // ParseBoolPipe here validates query param
+    console.log(queryParams.sortDesc);
     return this.userService.fetchUsers();
   }
 
-  // @Post()
+  // @Post()queryParam
   // createUsers(@Req() request: Request, @Res() response: Response) {
   //   console.log(request.body);
   //   response.json({ name: 'some name' });
@@ -38,14 +41,18 @@ export class UsersController {
   @Post()
   @UsePipes(new ValidationPipe())
   createUsers(@Body() userData: CreateUserDto) {
-    
+    this.userService.createUser(userData);
     console.log(userData);
-    return {};
+    return this.userService.fetchUsers();
   }
 
   @Get(':id')
-  getUserById(@Param('id') id: string) {
-    return { id };
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    const user = this.userService.fetchUserById(id);
+    if(!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+    return user;
   }
 
   @Get(':id/:postId')
