@@ -19,6 +19,7 @@ import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UsersService } from './services/users/users.service';
 import { IsBoolean, IsOptional } from 'class-validator';
 import { GetUserQueryDto } from './dtos/user.validator.dtos';
+import { ValidateCreateUserPipe } from './pipes/validate-create-user/validate-create-user.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -40,7 +41,8 @@ export class UsersController {
 
   @Post()
   @UsePipes(new ValidationPipe())
-  createUsers(@Body() userData: CreateUserDto) {
+  // createUsers(@Body() userData: CreateUserDto) { // use this if you don't want to transform anything
+  createUsers(@Body(ValidateCreateUserPipe) userData: CreateUserDto) { // Use this if u wanna transform & validate
     this.userService.createUser(userData);
     console.log(userData);
     return this.userService.fetchUsers();
