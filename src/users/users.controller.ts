@@ -11,6 +11,7 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -20,7 +21,9 @@ import { UsersService } from './services/users/users.service';
 import { IsBoolean, IsOptional } from 'class-validator';
 import { GetUserQueryDto } from './dtos/user.validator.dtos';
 import { ValidateCreateUserPipe } from './pipes/validate-create-user/validate-create-user.pipe';
+import { AuthGuard } from './guards/auth/auth.guard';
 
+@UseGuards(AuthGuard) // Use Guard here if you want the entire controller to have authentication guard
 @Controller('users')
 export class UsersController {
 
