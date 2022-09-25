@@ -8,7 +8,9 @@ import { Repository } from 'typeorm';
 export class UsersService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
 
-    findUsers() {}
+    findUsers() {
+        return this.userRepository.find();
+    }
 
     createUser(userDetails: CreateUserParams){
         const user = this.userRepository.create({ // not async

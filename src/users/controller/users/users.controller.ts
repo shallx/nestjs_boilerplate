@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 
@@ -7,13 +7,14 @@ export class UsersController {
     constructor(private userService: UsersService){}
     @Get()
     getUsers(){
-
+        return this.userService.findUsers();
     }
 
     @Post()
-    createUsers(@Body() userDetails: CreateUserDto) {
-        this.userService.createUser(userDetails);
-
+    @UsePipes(new ValidationPipe())
+    createUsers(@Body() createUserDto: CreateUserDto) {
+        const { confirmPassword, ...userDetails } = createUserDto;
+        return this.userService.createUser(userDetails);
     }
 
 }
