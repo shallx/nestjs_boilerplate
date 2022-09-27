@@ -4,7 +4,7 @@ export type CreateUserParams = {
     password: string;
 }
 
-export type UpdateUserDto = {
+export type UpdateUserParams = {
     username: string;
     password: string;
 }
