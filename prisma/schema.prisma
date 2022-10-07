@@ -12,22 +12,33 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement()) // @id is for the primary key
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  email String
+  email    String @unique
   password String
 
   firstName String?
-  lastName String?
+  lastName  String?
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  
+  bookmarks  Bookmark[]
+
+  @@map("users") // this is the name of the table in the database
 }
 
 model Bookmark {
   id Int @id @default(autoincrement())
+
+  title       String
+  description String?
+  link        String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title String
-  description String?
-  link String
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
 }
