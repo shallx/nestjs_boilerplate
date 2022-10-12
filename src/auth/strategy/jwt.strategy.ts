@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common"
 import { ConfigService } from "@nestjs/config"
 import { PassportStrategy } from "@nestjs/passport"
 import { ExtractJwt, Strategy } from "passport-jwt"
-import { PrismaService } from "../../../src/prisma/prisma.service"
+import { PrismaService } from "src/prisma/prisma.service"
 
 @Injectable() // if we don't use injector, we cant get params in constructor
 export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
