@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing'; // May not import automatically
-import { AppModule } from '../src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { AppModule } from 'src/app.module';
 describe('App e2e', () => {
     let app: INestApplication;
     beforeAll(async () => {
