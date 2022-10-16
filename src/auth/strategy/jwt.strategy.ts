@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { ConfigService } from "@nestjs/config"
 import { PassportStrategy } from "@nestjs/passport"
 import { ExtractJwt, Strategy } from "passport-jwt"
@@ -26,7 +26,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
 
     // If the user is not found or null it will atomatically throw
     // 401 status to request
-    delete user.password;
+    if(user) delete user.password;
+    
     return user;
   }
 }
