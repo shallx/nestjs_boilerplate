@@ -34,7 +34,7 @@ describe("App e2e", () => {
     await prisma.cleanDb()
 
     // Setting base Url
-    pactum.request.setBaseUrl('http://localhost:3333')
+    pactum.request.setBaseUrl("http://localhost:3333")
   })
 
   afterAll(() => {
@@ -42,11 +42,36 @@ describe("App e2e", () => {
   })
 
   describe("Auth", () => {
+    const dto: SignUpDto = {
+      email: "r@g.com",
+      password: "123",
+    }
+
     describe("Signup", () => {
-      const dto: SignUpDto = {
-        email: "r@g.com",
-        password: "123",
-      }
+      it("should throw if email empty", () => {
+        return pactum
+          .spec()
+          .post("/auth/signup")
+          .withBody({
+            password: dto.password,
+          })
+          .expectStatus(400)
+      })
+
+      it("should throw if password empty", () => {
+        return pactum
+          .spec()
+          .post("/auth/signup")
+          .withBody({
+            email: dto.email,
+          })
+          .expectStatus(400)
+      })
+
+      it("should throw if no body provided", () => {
+        return pactum.spec().post("/auth/signup").withBody({}).expectStatus(400)
+      })
+
       it("should signup", () => {
         return pactum
           .spec()
@@ -57,19 +82,56 @@ describe("App e2e", () => {
     })
 
     describe("Signin", () => {
-      it.todo("should signin")
+      it("should throw if email empty", () => {
+        return pactum
+          .spec()
+          .post("/auth/signin")
+          .withBody({
+            password: dto.password,
+          })
+          .expectStatus(400)
+      })
+
+      it("should throw if password empty", () => {
+        return pactum
+          .spec()
+          .post("/auth/signin")
+          .withBody({
+            email: dto.email,
+          })
+          .expectStatus(400)
+      })
+
+      it("should throw if no body provided", () => {
+        return pactum.spec().post("/auth/signin").withBody({}).expectStatus(400)
+      })
+      it("should signin", () => {
+        return pactum
+          .spec()
+          .post("/auth/signin")
+          .withBody(dto)
+          .expectStatus(200)
+          // userAt is the key at which the value is stored, and 'access_token' is acquired from body
+          .stores('userAt', 'access_token') 
+      })
     })
   })
 
   describe("User", () => {
-    describe("Get me", () => {})
+    describe("Get me", () => {
+        it("Should get current user", ()=> {
+            return pactum.spec().get('/users/me').withHeaders({
+                Authorization: 'Bearer $S{userAt}' // $S acts as variable marker, userAt is from .stores
+            }).expectStatus(200)
+        })
+    })
     describe("Edit User", () => {})
   })
 
   describe("Bookmarks", () => {
     describe("Create Bookmarks", () => {})
     describe("Get bookmark by id", () => {})
-    describe("Edit bookmark", () => {})
-    describe("Delete bookmark", () => {})
+    describe("Edit bookmark by id", () => {})
+    describe("Delete bookmark by id", () => {})
   })
 })
