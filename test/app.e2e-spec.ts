@@ -106,26 +106,50 @@ describe("App e2e", () => {
         return pactum.spec().post("/auth/signin").withBody({}).expectStatus(400)
       })
       it("should signin", () => {
-        return pactum
-          .spec()
-          .post("/auth/signin")
-          .withBody(dto)
-          .expectStatus(200)
-          // userAt is the key at which the value is stored, and 'access_token' is acquired from body
-          .stores('userAt', 'access_token') 
+        return (
+          pactum
+            .spec()
+            .post("/auth/signin")
+            .withBody(dto)
+            .expectStatus(200)
+            // userAt is the key at which the value is stored, and 'access_token' is acquired from body
+            .stores("userAt", "access_token")
+        )
       })
     })
   })
 
   describe("User", () => {
     describe("Get me", () => {
-        it("Should get current user", ()=> {
-            return pactum.spec().get('/users/me').withHeaders({
-                Authorization: 'Bearer $S{userAt}' // $S acts as variable marker, userAt is from .stores
-            }).expectStatus(200)
-        })
+      it("Should get current user", () => {
+        return pactum
+          .spec()
+          .get("/users/me")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}", // $S acts as variable marker, userAt is from .stores
+          })
+          .expectStatus(200)
+      })
     })
-    describe("Edit User", () => {})
+    describe("Edit User", () => {
+      it("Should edit user", () => {
+        const usr = {
+          firstName: "Rahi",
+          email: "a@g.com",
+        }
+
+        return pactum
+          .spec()
+          .patch("/users/")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(usr)
+          .expectStatus(200)
+          .expectBodyContains(usr.firstName)
+          .expectBodyContains(usr.email)
+      })
+    })
   })
 
   describe("Bookmarks", () => {
