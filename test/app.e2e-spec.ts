@@ -146,7 +146,7 @@ describe("App e2e", () => {
           })
           .withBody(usr)
           .expectStatus(200)
-          .expectBodyContains(usr.firstName)
+          .expectBodyContains(usr.firstName) // this body means response body
           .expectBodyContains(usr.email)
       })
     })
