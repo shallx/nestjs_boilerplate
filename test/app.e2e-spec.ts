@@ -169,7 +169,7 @@ describe("App e2e", () => {
       })
     })
     describe("Create Bookmarks", () => {
-      it("Create bookmark", ()=> {
+      it("Should create bookmark", ()=> {
         const bookmark: CreateBookmarkDto = {
           title: "Hello Earth",
           link: "Some Link",
@@ -185,7 +185,18 @@ describe("App e2e", () => {
           .expectBodyContains(bookmark.title)
       })
     })
-    describe("Get bookmark by id", () => {})
+    describe("Get bookmark by id", () => {
+      it("Should get bookmark", ()=> {
+
+        return pactum
+          .spec()
+          .get("/bookmarks")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+      })
+    })
     describe("Edit bookmark by id", () => {})
     describe("Delete bookmark by id", () => {})
   })
