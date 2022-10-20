@@ -5,6 +5,7 @@ import { PrismaService } from "src/prisma/prisma.service"
 import { describe } from "node:test"
 import * as pactum from "pactum"
 import { SignUpDto } from "src/auth/dto"
+import { CreateBookmarkDto } from "src/bookmark/dto"
 
 describe("App e2e", () => {
   let app: INestApplication
@@ -131,6 +132,7 @@ describe("App e2e", () => {
           .expectStatus(200)
       })
     })
+
     describe("Edit User", () => {
       it("Should edit user", () => {
         const usr = {
@@ -152,8 +154,37 @@ describe("App e2e", () => {
     })
   })
 
+  // ALl bookmark test
   describe("Bookmarks", () => {
-    describe("Create Bookmarks", () => {})
+    describe("Empty bookmark Check", () => {
+      it("Empty Bookmark Check", ()=> {
+        return pactum
+        .spec()
+        .get("/bookmarks/")
+        .withHeaders({
+          Authorization: "Bearer $S{userAt}",
+        })
+        .expectStatus(200)
+        .expectBodyContains([])
+      })
+    })
+    describe("Create Bookmarks", () => {
+      it("Create bookmark", ()=> {
+        const bookmark: CreateBookmarkDto = {
+          title: "Hello Earth",
+          link: "Some Link",
+        }
+        return pactum
+          .spec()
+          .post("/bookmarks")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(bookmark)
+          .expectStatus(201)
+          .expectBodyContains(bookmark.title)
+      })
+    })
     describe("Get bookmark by id", () => {})
     describe("Edit bookmark by id", () => {})
     describe("Delete bookmark by id", () => {})

@@ -16,7 +16,6 @@ export class UserService {
                 ...dto
             }
         })
-        console.log(user)
         if(user) delete user.password;
         return user;
     }
