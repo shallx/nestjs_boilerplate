@@ -15,7 +15,6 @@ export class BookmarkService {
     }
 
     createBookmark(userId: number, dto: CreateBookmarkDto){
-        console.log(dto);
         return this.prisma.bookmark.create({
             data: {
                 userId,
@@ -24,7 +23,14 @@ export class BookmarkService {
         })
     }
 
-    getBookmark(userId: number, bookmarkId : number){}
+    getBookmark(userId: number, bookmarkId : number){
+        this.prisma.bookmark.findFirst({
+            where: {
+                id: bookmarkId,
+                userId: userId,
+            }
+        })
+    }
 
     editBookmark(userId: number, bookmarkId : number, dto: EditBookmarkDto){}
 
