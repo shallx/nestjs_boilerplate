@@ -18,16 +18,19 @@ import { BookmarkService } from "./bookmark.service"
 @Controller("bookmarks")
 @UseGuards(JwtGuard)
 export class BookmarkController {
-  constructor(private bookmarkService: BookmarkService){}
+  constructor(private bookmarkService: BookmarkService) {}
 
   @Get()
   getBookmarks(@GetUser("id") userId: number) {
-    return this.bookmarkService.getBookmarks(userId);
+    return this.bookmarkService.getBookmarks(userId)
   }
 
   @Post()
-  createBookmark(@GetUser("id") userId: number, @Body() dto: CreateBookmarkDto) {
-    return this.bookmarkService.createBookmark(userId, dto);
+  createBookmark(
+    @GetUser("id") userId: number,
+    @Body() dto: CreateBookmarkDto,
+  ) {
+    return this.bookmarkService.createBookmark(userId, dto)
   }
 
   @Get(":id")
@@ -35,24 +38,23 @@ export class BookmarkController {
     @GetUser("id") userId: number,
     @Param("id", ParseIntPipe) bookmarkId: number,
   ) {
-    return this.bookmarkService.getBookmark(userId, bookmarkId);
+    return this.bookmarkService.getBookmark(userId, bookmarkId)
   }
 
-  @Patch()
+  @Patch(":id")
   editBookmark(
     @GetUser("id") userId: number,
     @Param("id", ParseIntPipe) bookmarkId: number,
     @Body() dto: EditBookmarkDto,
   ) {
-    return this.bookmarkService.editBookmark(userId, bookmarkId, dto);
+    return this.bookmarkService.editBookmark(userId, bookmarkId, dto)
   }
-
 
   @Delete(":id")
   deleteBookmark(
     @GetUser("id") userId: number,
     @Param("id", ParseIntPipe) bookmarkId: number,
   ) {
-    return this.bookmarkService.deleteBookmark(userId, bookmarkId);
+    return this.bookmarkService.deleteBookmark(userId, bookmarkId)
   }
 }
