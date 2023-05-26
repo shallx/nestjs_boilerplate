@@ -23,14 +23,14 @@ model User {
   // and age together
   // @@id([age, name], name: "age_name_index") // This is a composite index, it's a combination of 2 fields
 
-  @@unique([age, name]) // block level attribute, this makes sure there can't be 2 person with both same name
-  @@index([email])
+  // @@unique([age, name]) // block level attribute, this makes sure there can't be 2 person with both same name
+  // @@index([email])
 }
 
 model UserPreference {
   id           Int     @id @default(autoincrement())
   emailUpdates Boolean
-  user         User    @relation(fields: [userId], references: [id])
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String  @unique // for one to one relationship, the field must be unique
 }
 
