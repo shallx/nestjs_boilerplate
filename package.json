@@ -4,7 +4,8 @@
   "description": "",
   "main": "prisma/scripts.ts",
   "scripts": {
-    "devStart": "nodemon prisma/scripts.ts",
+    "prisma:test": "nodemon prisma/scripts.ts",
+    "prisma:reset": "prisma migrate reset --force",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

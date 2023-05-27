@@ -23,7 +23,7 @@ model User {
   // and age together
   // @@id([age, name], name: "age_name_index") // This is a composite index, it's a combination of 2 fields
 
-  // @@unique([age, name]) // block level attribute, this makes sure there can't be 2 person with both same name
+  @@unique([age, name]) // block level attribute, this makes sure there can't be 2 person with both same name
   // @@index([email])
 }
 
