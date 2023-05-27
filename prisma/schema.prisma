@@ -22,9 +22,9 @@ model User {
   // One to One relationshipo
   // and age together
   // @@id([age, name], name: "age_name_index") // This is a composite index, it's a combination of 2 fields
+  // @@index([email])
 
   @@unique([age, name]) // block level attribute, this makes sure there can't be 2 person with both same name
-  // @@index([email])
 }
 
 model UserPreference {
@@ -36,13 +36,14 @@ model UserPreference {
 
 model Post {
   id            Int        @id @default(autoincrement())
+  title         String
   averageRating Float
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   author        User       @relation("writtenPost", fields: [authorId], references: [id])
   authorId      String
   favoritedBy   User?      @relation("FavoritePosts", fields: [favoritedById], references: [id])
-  favoritedById String
+  favoritedById String?
   categories    Category[] // many to many relationshipo
 }
 
