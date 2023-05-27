@@ -9,10 +9,8 @@ async function main() {
   // UserService.createManyUser()
   // UserService.getByPagination()
   // UserService.getUsersByFilter();
-
-  PostService.createPost()
-  // const post = await  prisma.post.findMany();
-  // console.log(post);
+  // PostService.createPost()
+  PostService.postWithAuthorDetail()
 }
 
 class UserService {
@@ -173,31 +171,44 @@ class UserService {
 }
 
 class PostService {
-  static createPost = async() => {
+
+  static createPost = async () => {
     const user = await prisma.user.findFirst({
       where: {
-        name: "Rahi"
-      }
-    })
+        name: "Rahi",
+      },
+    });
 
-    if(user){
+    if (user) {
       const post = await prisma.post.create({
         data: {
           authorId: user.id,
-          title: 'Some title',
-          averageRating: 2.5
-        }
-      })
-      console.log(post)
-
+          title: "Some title",
+          averageRating: 2.5,
+        },
+      });
+      console.log(post);
     }
 
-    
+    console.log(user);
+  };
 
-    console.log(user)
-    
+  // return those post that has an author with an age greather than 10
+  static postWithAuthorDetail = async() => {
+    const post = await prisma.post.findMany({
+      where: {
+        author: {
+          age: {
+            gt: 10
+          }
+        }
+      },
+      include: {
+        author: true,
+      }
+    })
+    console.log(post)
   }
-
 }
 
 main()
